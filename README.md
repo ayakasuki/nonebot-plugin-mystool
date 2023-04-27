@@ -1,5 +1,4 @@
 
-
 ```
  __    __     __  __     ______     ______   ______     ______     __
 /\ "-./  \   /\ \_\ \   /\  ___\   /\__  _\ /\  __ \   /\  __ \   /\ \
@@ -8,7 +7,7 @@
   \/_/  \/_/   \/_____/   \/_____/     \/_/   \/_____/   \/_____/   \/_____/
 ```
 
-<div align="center"><h1> 真寻适配版 - mysTool - 米游社辅助工具插件
+<div align="center"><h1> 真寻适配版 - mysTool - 米游社辅助工具插件</div>
 
 <div align="center">
   <a href="https://github.com/ayakasuki/nonebot-plugin-mystool" target="_blank">
@@ -23,19 +22,20 @@
 </div>
 
 **版本 - v0.2.5**
-
+ ```
 📣 更新：支持崩坏:星穹铁道的商品兑换。重新增加阻塞，否则真寻AI会跟着回复。
 📣 更新：0.2.5更新
     - 修复重写配置文件 `pluginConfig.json` 不生效的问题
     - 修复单账户情况下无法增删兑换计划的问题
-    - 修复 `/兑换` 命令可能与其他插件命令冲突的问题，同时 [🔗用法变更](https://github.com/Ljzd-PRO/nonebot-plugin-mystool/wiki/Information-Exchange#增加删除兑换计划)
+    - 修复 `/兑换` 命令可能与其他插件命令冲突的问题，同时 [🔗用法变更](增加删除兑换计划)
     - 精简接收的命令
     - 更正 `device_save` "设备保存" 日志文本的错误
-📣 更新：修复多用户情况下登录操作会导致用户数据错位的问题([#18](https://github.com/Ljzd-PRO/nonebot-plugin-mystool/issues/18))
+📣 更新：修复多用户情况下登录操作会导致用户数据错位的问题([#18])
 📣 更新：0.2.4更新-
         - 修复旧版config.py中目录与模块名称不一致导致报错
         - 适配真寻configs/config.yaml。主要设置迁移进config.yaml进行编辑。
         - 提醒：千万不要没事修改目录名称。如需更改，config.py中需要进行相应模块名更改。
+```
 
 ### 功能和特性
 
@@ -57,7 +57,9 @@
   ```
 
 * 安装后请安装依赖！
+ 
   1.poetry模式：在BOT根目录 ```cd ./extensive_plugin/nonebot_plugin_mystool``` 后进行```poetry install```
+ 
   2.普通python运行 ：自行转换```pyproject.toml```为```requirements.txt```后```pip install -r requirements.txt```
 
 * 第一次运行后，务必进入真寻BOT的config文件夹下的config.yaml进行编辑，否则将默认```米游社小助手帮助``` 进行触发命令！
