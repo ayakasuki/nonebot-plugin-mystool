@@ -10,14 +10,14 @@
 <div align="center"><h1> 真寻适配版 - mysTool - 米游社辅助工具插件</div>
 
 <div align="center">
-  <a href="https://github.com/ayakasuki/nonebot-plugin-mystool" target="_blank">
-    <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/ayakasuki/nonebot-plugin-mystool/badge?style=for-the-badge">
+  <a href="https://github.com/ayakasuki/nonebot_plugin_mystool" target="_blank">
+    <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/ayakasuki/nonebot_plugin_mystool/badge?style=for-the-badge">
   </a>
   <a href="https://github.com/ayakasuki/nonebot-plugin-mystool" target="_blank">
-    <img alt="最新发行版" src="https://img.shields.io/github/v/release/Aayakasuki/nonebot-plugin-mysTool?logo=python&style=for-the-badge">
+    <img alt="最新发行版" src="https://img.shields.io/github/v/release/Aayakasuki/nonebot_plugin_mystool?logo=python&style=for-the-badge">
   </a>
   <a href="https://github.com/ayakasuki/nonebot-plugin-mystool" target="_blank">
-    <img alt="最后提交" src="https://img.shields.io/github/last-commit/Ayakasuki/nonebot-plugin-mysTool?style=for-the-badge">
+    <img alt="最后提交" src="https://img.shields.io/github/last-commit/Ayakasuki/nonebot_plugin_mystool?style=for-the-badge">
   </a>
 </div>
 
