@@ -53,7 +53,7 @@
 * 可直接BOT在根目录运行代码安装
   
   ```
-  git clone https://github.com/ayakasuki/nonebot-plugin-mystool.git ./extensive_plugin/nonebot_plugin_mystool
+  git clone https://github.com/ayakasuki/nonebot_plugin_mystool.git ./extensive_plugin/nonebot_plugin_mystool
   ```
 
 * 安装后请安装依赖！
