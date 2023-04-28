@@ -28,12 +28,7 @@ if TYPE_CHECKING:
 
 driver = nonebot.get_driver()
 
-PLUGIN = nonebot.plugin.get_plugin(conf.PLUGIN_NAME)
-'''本插件数据'''
 
-if not PLUGIN:
-    logger.warning("插件数据(Plugin)获取失败，如果插件是从本地加载的，需要修改配置文件中 PLUGIN_NAME 为插件目录，否则将导致无法获取插件帮助信息等")
-    
 class CommandBegin:
     """
     命令开头字段
@@ -87,6 +82,12 @@ def set_logger(logger: "Logger"):
 
 logger = set_logger(logger)
 """本插件所用日志记录器对象（包含输出到文件）"""
+
+PLUGIN = nonebot.plugin.get_plugin(conf.PLUGIN_NAME)
+'''本插件数据'''
+
+if not PLUGIN:
+    logger.warning("插件数据(Plugin)获取失败，如果插件是从本地加载的，需要修改配置文件中 PLUGIN_NAME 为插件目录，否则将导致无法获取插件帮助信息等")
 
 
 class NtpTime:
@@ -182,6 +183,7 @@ def generate_ds(data: Union[str, dict, list] = "", params: Union[str, dict] = ""
                 platform: Literal["ios", "android"] = "ios"):
     """
     获取Headers中所需DS
+
     :param data: 可选，网络请求中需要发送的数据
     :param params: 可选，URL参数
     :param platform: 可选，平台，ios或android
@@ -214,6 +216,7 @@ def generate_ds(data: Union[str, dict, list] = "", params: Union[str, dict] = ""
 async def get_file(url: str, retry: bool = True):
     """
     下载文件
+
     :param url: 文件URL
     :param retry: 是否允许重试
     :return: 文件数据
@@ -277,6 +280,7 @@ def check_ds(response: str):
 def blur_phone(phone: Union[str, int]) -> str:
     """
     模糊手机号
+
     :param phone: 手机号
     :return: 模糊后的手机号
     """
@@ -323,6 +327,7 @@ class Subscribe:
         """
         优先加载来自网络的配置，若获取失败，则返回本地默认配置。\n
         若下载失败返回`False`
+
         :param force: 是否强制在线读取配置，而不使用本地缓存的
         """
         success = True
