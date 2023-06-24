@@ -1,45 +1,10 @@
-"""
-# mysTool - 米游社辅助工具插件
-
-**版本 - v0.2.9**
-
-## 使用说明
-
-### 🛠️ NoneBot2 机器人部署和插件安装
-
-请查看 -> [🔗Installation](https://github.com/Ljzd-PRO/nonebot-plugin-mystool/wiki/Installation)
-
-### 📖 插件具体使用说明
-
-请查看 -> [🔗Wiki 文档](https://github.com/Ljzd-PRO/nonebot-plugin-mystool/wiki)
-
-### ❓ 获取插件帮助信息
-
-#### 插件命令
-
-```
-/帮助
-```
-
-> ⚠️ 注意 此处没有使用 [🔗 插件命令头](https://github.com/Ljzd-PRO/nonebot-plugin-mystool/wiki/Configuration-Config#command_start)
-
-## 其他
-
-### [📃源码说明](https://github.com/Ljzd-PRO/nonebot-plugin-mystool/wiki/Source-Structure)
-### 适配 [绪山真寻Bot](https://github.com/HibiKier/zhenxun_bot) 的分支
-- https://github.com/MWTJC/zhenxun-plugin-mystool
-- https://github.com/ayakasuki/nonebot-plugin-mystool
-
-"""
-
 import pkgutil
 from pathlib import Path
+
 from nonebot.plugin import PluginMetadata
 from configs.config import Config
-from .data import create_files
 
-VERSION = "v0.2.9"
-#'''插件版本号'''
+from .plugin_data import VERSION
 __zx_plugin_name__ = '米游社小助手'
 __plugin_cmd__ = ["米游社小助手"]
 __plugin_type__ = ("原神相关",)
@@ -49,9 +14,8 @@ __plugin_settings__ = {
     "limit_superuser": False,
     "cmd": ["米游社小助手"],
 }
-
 __plugin_meta__ = PluginMetadata(
-    name=f"❖米游社小助手插件❖\n版本 - {VERSION}\n",
+    name=f"米游社小助手插件\n版本 - {VERSION}\n",
     description="米游社工具-每日米游币任务、游戏签到、商品兑换、免抓包登录\n",
     usage="""
     \n🔐 {HEAD}登录 ➢ 登录绑定米游社账户\
@@ -72,9 +36,14 @@ __plugin_meta__ = PluginMetadata(
     extra={"version": VERSION}
 )
 
+# 在此处使用 get_driver() 防止多进程生成图片时反复调用
 
-# 需要最先执行的函数
-create_files()
+from .utils import CommandBegin
+from nonebot import init
+from nonebot import get_driver
+
+init()  # 初始化Driver对象
+get_driver().on_startup(CommandBegin.set_command_begin)
 
 # 加载其它代码
 
