@@ -310,9 +310,39 @@ def command_matcher(command: str, priority: int = None, block: bool = None) -> M
     用于构建on_command事件相应器的函数，
     将使用偏好设置里的priority优先级和block设置
 
+<<<<<<< HEAD
+=======
+        :param force: 是否强制在线读取配置，而不使用本地缓存的
+        """
+        success = True
+        if not Subscribe.conf_list or force or self.index >= len(Subscribe.conf_list):
+            logger.info(f"{conf.LOG_HEAD}读取配置 - 开始下载配置...")
+            success = await self.download()
+            self.index = 0
+        if not success:
+            return False
+        else:
+            conf.parse_obj(Subscribe.conf_list[self.index]["config"])
+            self.index += 1
+            return True
+
+# TODO: 一个用于构建on_command事件相应器的函数，
+#  将使用偏好设置里的priority优先级和block设置，
+#  可能可以作为装饰器使用
+#   （需要先等用户数据改用Pydantic作为数据模型）
+def command_matcher(command: str, priority: int = None, block: bool = None) -> Matcher:
+    """
+    用于构建on_command事件相应器的函数，
+    将使用偏好设置里的priority优先级和block设置
+
+>>>>>>> origin/stable
     :param command: 指令名
     :param priority: 优先级，为 None 则读取偏好设置
     :param block: 是否阻塞，为 None 则读取偏好设置
     :return: 事件响应器
     """
+<<<<<<< HEAD
     ...
+=======
+    ...
+>>>>>>> origin/stable

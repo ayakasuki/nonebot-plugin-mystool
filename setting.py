@@ -14,9 +14,13 @@ from .plugin_data import PluginDataManager, write_plugin_data
 from .user_data import UserAccount
 from .utils import COMMAND_BEGIN
 
+<<<<<<< HEAD
 _conf = PluginDataManager.plugin_data_obj
 
 setting = on_command(_conf.preference.command_start + '设置', priority=4, block=True)
+=======
+setting = on_command(conf.COMMAND_START + '设置', priority=4, block=True)
+>>>>>>> origin/stable
 setting.name = "设置"
 setting.usage = '如需配置是否开启每日任务、设备平台、频道任务等相关选项，请使用『{HEAD}账号设置』命令。' \
                 '\n如需设置米游币任务和游戏签到后是否进行QQ通知，请使用『{HEAD}通知设置』命令。'

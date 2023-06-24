@@ -92,18 +92,46 @@ async def perform_game_sign(bot: Bot, qq: int, is_auto: bool,
     if isinstance(group_event, PrivateMessageEvent):
         group_event = None
     failed_accounts = []
+<<<<<<< HEAD
     user = _conf.users[qq]
     for account in _conf.users.get(qq).accounts.values():
         signed = False
         """是否已经完成过签到"""
         game_record_status, records = await get_game_record(account)
         if not game_record_status:
+=======
+    for account in accounts:
+        gamesign = GameSign(account)
+        record_list: List[GameRecord] = await get_game_record(account)
+        if isinstance(record_list, int):
+            if record_list == -1:
+                failed_accounts.append(account)
+                if group_event:
+                    await bot.send(event=group_event, at_sender=True,
+                                   message=f"⚠️账户 {blur(account.phone)} 登录失效，请重新登录")
+                else:
+                    await bot.send_private_msg(user_id=qq, message=f"⚠️账户 {account.phone} 登录失效，请重新登录")
+                continue
+            else:
+                if group_event:
+                    await bot.send(event=group_event, at_sender=True,
+                                   message=f"⚠️账户 {blur(account.phone)} 获取游戏账号信息失败，请重新尝试")
+                else:
+                    await bot.send_private_msg(user_id=qq,
+                                               message=f"⚠️账户 {account.phone} 获取游戏账号信息失败，请重新尝试")
+                continue
+        if not record_list and not is_auto:
+>>>>>>> origin/stable
             if group_event:
                 await bot.send(event=group_event, at_sender=True,
                                message=f"⚠️账户 {account.bbs_uid} 获取游戏账号信息失败，请重新尝试")
             else:
                 await bot.send_private_msg(user_id=qq,
+<<<<<<< HEAD
                                            message=f"⚠️账户 {account.bbs_uid} 获取游戏账号信息失败，请重新尝试")
+=======
+                                           message=f"⚠️账户 {account.phone} 没有绑定任何游戏账号，跳过游戏签到")
+>>>>>>> origin/stable
             continue
         games_has_record = []
         for class_type in BaseGameSign.AVAILABLE_GAME_SIGNS:
@@ -134,8 +162,41 @@ async def perform_game_sign(bot: Bot, qq: int, is_auto: bool,
                     elif sign_status.need_verify:
                         message = f"⚠️账户 {account.bbs_uid} 🎮『{signer.NAME}』签到时可能遇到验证码拦截，请尝试使用命令『/账号设置』更改设备平台，若仍失败请手动前往米游社签到"
                     else:
+<<<<<<< HEAD
                         message = f"⚠️账户 {account.bbs_uid} 🎮『{signer.NAME}』签到失败，请稍后再试"
                     if user.enable_notice or not is_auto:
+=======
+                        await bot.send_private_msg(user_id=qq, message=f"⚠️账户 {account.phone} 登录失效，请重新登录")
+                    continue
+
+                # 自动签到时，要求用户打开了签到功能；手动签到时都可以调用执行。若没签到，则进行签到功能。
+                # 若获取今日签到情况失败，但不是登录失效的情况，仍可继续
+                if ((account.gameSign and is_auto) or not is_auto) and (
+                        (isinstance(sign_info, Info) and not sign_info.is_sign) or (
+                        isinstance(sign_info, int) and sign_info != -1)):
+                    sign_flag = await gamesign.sign(sign_game, record.uid, account.platform)
+                    if sign_flag != 1:
+                        if sign_flag == -1:
+                            message = f"⚠️账户 {account.phone if not group_event else blur(account.phone)} 🎮『{game_name}』签到时服务器返回登录失效，请尝试重新登录绑定账户"
+                        elif sign_flag == -5:
+                            message = f"⚠️账户 {account.phone if not group_event else blur(account.phone)} 🎮『{game_name}』签到时可能遇到验证码拦截，请尝试使用命令『/账号设置』更改设备平台，若仍失败请手动前往米游社签到"
+                        else:
+                            message = f"⚠️账户 {account.phone if not group_event else blur(account.phone)} 🎮『{game_name}』签到失败，请稍后再试"
+                        if UserData.is_notice(qq) or not is_auto:
+                            if group_event:
+                                await bot.send(event=group_event, at_sender=True, message=message)
+                            else:
+                                await bot.send_msg(
+                                    message_type="private",
+                                    user_id=qq,
+                                    message=message
+                                )
+                        await asyncio.sleep(conf.SLEEP_TIME)
+                        continue
+                    await asyncio.sleep(conf.SLEEP_TIME)
+                elif isinstance(sign_info, int):
+                    if UserData.is_notice(qq) or not is_auto:
+>>>>>>> origin/stable
                         if group_event:
                             await bot.send(event=group_event, at_sender=True, message=message)
                         else:
@@ -210,6 +271,7 @@ async def perform_bbs_sign(bot: Bot, qq: int, is_auto: bool,
     if isinstance(group_event, PrivateMessageEvent):
         group_event = None
     failed_accounts = []
+<<<<<<< HEAD
     user = _conf.users[qq]
     for account in user.accounts.values():
         for class_type in account.mission_games:
@@ -226,10 +288,37 @@ async def perform_bbs_sign(bot: Bot, qq: int, is_auto: bool,
                 if group_event:
                     await bot.send(event=group_event, at_sender=True,
                                    message=f'⚠️账户 {account.bbs_uid} 获取任务完成情况请求失败，你可以手动前往App查看')
+=======
+    for account in accounts:
+        missions_state = await get_missions_state(account)
+        mybmission = await Action(account).async_init()
+        if isinstance(missions_state, int):
+            if mybmission == -1:
+                if group_event:
+                    await bot.send(event=group_event, at_sender=True,
+                                   message=f'⚠️账户 {blur(account.phone)} 登录失效，请重新登录')
+                else:
+                    await bot.send_private_msg(user_id=qq, message=f'⚠️账户 {account.phone} 登录失效，请重新登录')
+                continue
+            if group_event:
+                await bot.send(event=group_event, at_sender=True,
+                               message=f'⚠️账户 {blur(account.phone)} 获取任务完成情况请求失败，你可以手动前往App查看')
+            else:
+                await bot.send_private_msg(user_id=qq,
+                                           message=f'⚠️账户 {account.phone} 获取任务完成情况请求失败，你可以手动前往App查看')
+            continue
+        if isinstance(mybmission, int):
+            if mybmission == -1:
+                failed_accounts.append(account)
+                if group_event:
+                    await bot.send(event=group_event, at_sender=True,
+                                   message=f'⚠️账户 {blur(account.phone)} 登录失效，请重新登录')
+>>>>>>> origin/stable
                 else:
                     await bot.send_private_msg(user_id=qq,
                                                message=f'⚠️账户 {account.bbs_uid} 获取任务完成情况请求失败，你可以手动前往App查看')
                 continue
+<<<<<<< HEAD
 
             myb_before_mission = missions_state.current_myb
 
@@ -264,12 +353,42 @@ async def perform_bbs_sign(bot: Bot, qq: int, is_auto: bool,
                                 await bot.send_private_msg(user_id=qq,
                                                            message=f'⚠️账户 {account.bbs_uid} 登录失效，请重新登录')
                             continue
+=======
+            if group_event:
+                await bot.send(event=group_event, at_sender=True,
+                               message=f'⚠️账户 {blur(account.phone)} 请求失败，请重新尝试')
+            else:
+                await bot.send_private_msg(user_id=qq, message=f'⚠️账户 {account.phone} 请求失败，请重新尝试')
+            continue
+        # 自动执行米游币任务时，要求用户打开了任务功能；手动执行时都可以调用执行。
+        if (account.mybMission and is_auto) or not is_auto:
+            if not is_auto:
+                if not group_event:
+                    await bot.send_private_msg(user_id=qq, message=f'📱账户 {account.phone} ⏳开始执行米游币任务...')
+
+            # 执行任务
+            for mission_state in missions_state[0]:
+                if mission_state[1] < mission_state[0].total_times:
+                    for gameID in account.missionGame:
+                        await mybmission.NAME_TO_FUNC[mission_state[0].key_name](mybmission, gameID)
+                        await asyncio.sleep(conf.SLEEP_TIME)
+
+            # 用户打开通知或手动任务时，进行通知
+            if UserData.is_notice(qq) or not is_auto:
+                missions_state = await get_missions_state(account)
+                if isinstance(missions_state, int):
+                    if mybmission == -1:
+>>>>>>> origin/stable
                         if group_event:
                             await bot.send(event=group_event, at_sender=True,
                                            message=f'⚠️账户 {account.bbs_uid} 获取任务完成情况请求失败，你可以手动前往App查看')
                         else:
                             await bot.send_private_msg(user_id=qq,
+<<<<<<< HEAD
                                                        message=f'⚠️账户 {account.bbs_uid} 获取任务完成情况请求失败，你可以手动前往App查看')
+=======
+                                                       message=f'⚠️账户 {account.phone} 登录失效，请重新登录')
+>>>>>>> origin/stable
                         continue
                     if all(map(lambda x: x[1] >= x[0].threshold, missions_state.state_dict.values())):
                         notice_string = f"🎉已完成今日米游币任务 - 分区『{class_type.NAME}』"
@@ -338,17 +457,28 @@ async def resin_check(bot: Bot, qq: int, is_auto: bool,
                                            message=f'⚠️账户 {account.bbs_uid} 登录失效，请重新登录')
                         else:
                             await bot.send_private_msg(user_id=qq,
+<<<<<<< HEAD
                                                        message=f'⚠️账户 {account.bbs_uid} 登录失效，请重新登录')
                 if genshin_board_status.no_genshin_account:
+=======
+                                                       message=f'⚠️账户 {account.phone} 登录失效，请重新登录')
+                if genshinstatus == -4:
+>>>>>>> origin/stable
                     if not is_auto:
                         if group_event:
                             await bot.send(event=group_event, at_sender=True,
                                            message=f'⚠️账户 {account.bbs_uid} 没有绑定任何原神账户，请绑定后再重试')
                         else:
                             await bot.send_private_msg(user_id=qq,
+<<<<<<< HEAD
                                                        message=f'⚠️账户 {account.bbs_uid} 没有绑定任何原神账户，请绑定后再重试')
                         account.enable_resin = False
                         write_plugin_data()
+=======
+                                                       message=f'⚠️账户 {account.phone} 没有绑定任何原神账户，请绑定后再重试')
+                        account.checkResin = False
+                        UserData.set_account(account, qq, account.phone)
+>>>>>>> origin/stable
                         continue
                 if not is_auto:
                     if group_event:
@@ -356,7 +486,11 @@ async def resin_check(bot: Bot, qq: int, is_auto: bool,
                                        message=f'⚠️账户 {account.bbs_uid} 获取实时便笺请求失败，你可以手动前往App查看')
                     else:
                         await bot.send_private_msg(user_id=qq,
+<<<<<<< HEAD
                                                    message=f'⚠️账户 {account.bbs_uid} 获取实时便笺请求失败，你可以手动前往App查看')
+=======
+                                                   message=f'⚠️账户 {account.phone} 获取实时便笺请求失败，你可以手动前往App查看')
+>>>>>>> origin/stable
                 continue
             if genshin_board_status.need_verify:
                 if group_event:
@@ -419,8 +553,13 @@ def daily_update():
     """
     每日图片生成函数
     """
+<<<<<<< HEAD
     logger.info(f"{_conf.preference.log_head}后台开始生成每日商品图片")
     threading.Thread(target=generate_image).start()
+=======
+    logger.info(f"{conf.LOG_HEAD}开始生成每日商品图片")
+    generate_image()
+>>>>>>> origin/stable
 
 
 @scheduler.scheduled_job("cron",
